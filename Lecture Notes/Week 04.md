@@ -7,7 +7,7 @@ Although interfaces provide us a way to define a hierarchical relationship, the 
 If we want to define a new class which have all methods in the `SLList` but new ones such as `RotatingRight`.
 
 ```java
-public class RotatingSLList<Item> extends SLList<Item>
+public class RotatingSLList<Item> extends SLList<Item>		// is-a
 ```
 
 With `extends` key word, the subclass withh inhert all these components:
@@ -15,6 +15,9 @@ With `extends` key word, the subclass withh inhert all these components:
 * All instance and static variables
 * All methods
 * All nested classes
+* (but private members can't, and contructors are not inherited)
+
+---
 
 ## VengefulSLList
 
@@ -22,15 +25,15 @@ We could build a `VengefulSLList` class to make a list that could remeber the de
 
 ```java
 public class VengefulSLList<Item> extends SLList<Item> {
-    SLList<Item> deletedItems;
+    SLList<Item> deletedItems;		// SLList<Item> deletedItems = new SLList<Item>();
 
     public VengefulSLList() {
         deletedItems = new SLList<Item>();
-    }
+    }	// 或者可以不要这个 constructor, 直接在 deletedItems 声明处 new 一个 (↑↑↑)
 
     @Override
     public Item removeLast() {
-        Item x = super.removeLast();
+        Item x = super.removeLast();	// 不能直接复制 SLList.removeLast() 中的代码, 因为其包含了 SLList 的 private 成员
         deletedItems.addLast(x);
         return x;
     }
@@ -42,13 +45,33 @@ public class VengefulSLList<Item> extends SLList<Item> {
 }
 ```
 
+- `super` 等价于 `SLList`: 因此 `super.methodName()` -> 一般的方法, `super()` -> 调用构造函数
+
 ### Constructors
 
 While constructors are not inherited, Java requires that all constructors must start with a call to one of its superclass's constructors. If you don't call it explicitly, Java will automatically call it for you. If we forget to specify which contructor to use, Java will call the default one without parameters.
 
+```java
+public VengefulSLList() {
+    super();							// 可以省略
+    deletedItems = newSLList<item>();
+}
+```
+
+```java
+public VengefulSLList(Item x) {
+    super(x);							// 不能省略, 否则调用的是 super();
+    deletedItems = new SLList<item>();
+}
+```
+
 ### The Object Class
 
 Every class in Java is a descendant of the Object class, or extends the Object class. Even classes that do not have an explicit extends in their class still implicitly extend the Object class.
+
+- 意味着 `SLList` 继承了 `Object` 的所有成员
+- 意味着所有 obj 可以使用 `.equals(Object obj)`, `.hashCode()`, `toString()` ...
+- https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 
 ### Encapsulation
 
@@ -57,14 +80,22 @@ Every class in Java is a descendant of the Object class, or extends the Object c
 
 ### Type Checking and Casting
 
-Compilers will check types of objects based on its staitc type. For instance, the following code will result in a compile-time error since the compiler thinks that `SLList` does not have the `printLostItem` method and `vsl2` can't contain the `SLList` object.
+Compilers will check types of objects based on its staitc type. For instance, the following code will result in a ==compile-time error== since the compiler thinks that `SLList` does not have the `printLostItem` method and `vsl2` can't contain the `SLList` object.
 
 ```java
+/** background1: SLList <- VengefulSLList */
+/** background2: removeLast() is overridden by VengefulSLList */
 VengefulSLList<Integer> vsl = new VengefulSLList<Integer>(9);
-SLList<Integer> sl = vsl;
-sl.printLostItems();
-VengefulSLList<Integer> vsl2 = sl;
+SLList<Integer> sl = vsl;				// fine
+
+sl.addLast(50);							// fine, call the SLList.addLast()
+sl.removeLast();						// fine, call the VengefulSLList.removeLast()
+
+sl.printLostItems();					// compile-time error
+VengefulSLList<Integer> vsl2 = sl;		// compile-time error
 ```
+
+- the compiler only allows method calls and assignment based on compile-time types.
 
 #### Expressions
 
@@ -76,6 +107,10 @@ SLList<Integer> sl = new VengefulSLList<Integer>();
 
 Above, the compile-time type of the right-hand side of the expression is `VengefulSLList`. The compiler checks to make sure that `VengefulSLList` "is-a" `SLList`, and allows this assignment.
 
+```java
+VengefulSLList<Integer> sl = new SLList<Integer>();		// error
+```
+
 #### Method
 
 The type of a method's return value is the method's compile-time type. Since the return type of `maxDog` is `Dog`, any call to `maxDog` will have compile-time type `Dog`.
@@ -84,8 +119,8 @@ The type of a method's return value is the method's compile-time type. Since the
 Poodle frank = new Poodle("Frank", 5);
 Poodle frankJr = new Poodle("Frank Jr.", 15);
 
-Dog largerDog = maxDog(frank, frankJr);
-Poodle largerPoodle = maxDog(frank, frankJr); //does not compile! RHS has compile-time type Dog
+Dog largerDog = maxDog(frank, frankJr);			// fine
+Poodle largerPoodle = maxDog(frank, frankJr);	// does not compile! RHS has compile-time type Dog
 ```
 
 #### Casting
@@ -93,7 +128,15 @@ Poodle largerPoodle = maxDog(frank, frankJr); //does not compile! RHS has compil
 We could specify the type of an expression or a method to let Java compiler ignore type check. That might be dangerous and may cause run-time errors.
 
 ```java
-Poodle largerPoodle = (Poodle) maxDog(frank, frankJr); // compiles! Right hand side has compile-time type Poodle after casting
+Poodle largerPoodle = (Poodle) maxDog(frank, frankJr);
+// compiles! Right hand side has compile-time type Poodle after casting
+```
+
+However casting could be dangerous
+```java
+Poodle frank = new Pondle("Frank", 5);
+Malamute frankSr = new Malamute("Frank Sr", 100);
+Poodle largerPoodle = (Poodle) maxDog(frank, frankSr);		// run-time exception: ClassCastException
 ```
 
 
@@ -120,8 +163,6 @@ public class TenX implements IntUnaryFunction{
     public int apply(int x) {
         return 10 * x;
     }
-
-    
 }
 ```
 
@@ -129,9 +170,12 @@ public class TenX implements IntUnaryFunction{
 public static int do_twice(IntUnaryFunction f, int x) {
     return f.apply(f.apply(x));
 }
-
 System.out.println(do_twice(new TenX(), 2));
 ```
+
+<img src="./Week 04.assets/image-20221208120012637.png" alt="image-20221208120012637" style="zoom: 33%;" />
+
+---
 
 ## Subtype Polymorphism vs. HoFs
 
@@ -234,7 +278,7 @@ public static OurComparable max(OurComparable[] items) {
 ### Comparables
 
 Although `OurComparable` interface seems solved the issue, it's awkward to use and there's no existing classes implement `OurComparable`.
-The solution is that we could use the existed interface `Comparable`.
+The solution is that we could use ==the existed interface== `Comparable`.
 
 ```java
 public interface Comparable<T> {
@@ -253,6 +297,17 @@ public class Dog implements Comparable<Dog> {
 }
 ```
 
+The same time,
+```java
+public class Maximizer {
+    public static Comparable max(Comparable[] items) {
+        // ...
+    }
+}
+```
+
+<img src="./Week 04.assets/image-20221212154627786.png" alt="image-20221212154627786" style="zoom:25%;" />
+
 ### Comparator
 
 We could only implement one `compareTo` method for each class. However, if we want to add more orders of comparasion, we could implement `Comparator` interface.
@@ -267,7 +322,7 @@ This shows that the `Comparator` interface requires that any implementing class 
 To compare two dogs based on their names, we can simply defer to `String`'s already defined `compareTo` method.
 
 ```java
-import java.util.Comparator;
+import java.util.Comparator;					// 使用 Comparator 需要 import (使用 Comparable 则不需要)
 
 public class Dog implements Comparable<Dog> {
     ...
@@ -275,6 +330,7 @@ public class Dog implements Comparable<Dog> {
         return this.size - uddaDog.size;
     }
 
+    // static: 因为不需要实例化一个 Dog 来获取 NameComparator
     private static class NameComparator implements Comparator<Dog> {
         public int compare(Dog a, Dog b) {
             return a.name.compareTo(b.name);
@@ -290,6 +346,8 @@ public class Dog implements Comparable<Dog> {
 ```java
 Comparator<Dog> nc = Dog.getNameComparator();
 ```
+
+---
 
 ## Exceptions, Iterators, Object Methods
 
@@ -329,6 +387,14 @@ Set<String> s = new HashSet<>();
 s.add("Tokyo");
 s.add("Lagos");
 System.out.println(S.contains("Tokyo"));
+```
+
+在 python 中,
+```python
+s = set()
+s.add("Tokyo")
+s.add("Lagos")
+print("Tokyo" in s)		# True
 ```
 
 ### ArraySet
@@ -410,22 +476,24 @@ for (String city : s) {
 }
 ```
 
-The code above is equal to the following ugly implementaion.
+==The code above is equal to the following ugly implementaion.==
 
 ```java
 Set<String> s = new HashSet<>();
 ...
-Iterator<String> seer = s.iterator();
-while (seer.hasNext()) {
-    String city = seer.next();
-    ...
+Iterator<String> seer = s.iterator();	// .iterator() 
+while (seer.hasNext()) {				// .hasNext() 
+    // String city = seer.next();
+    // ...
+	System.out.println(seer.next());	// .next() returns the item that the iterator point to currently
+    									// and move the iterator towards the next item
 }
 ```
 
 If we want to do the same (ugly version of enhanced loop) with our own `ArraySet`, we have to implement the `Iterator` interface.
 
 ```java
-public interface Iterator<T> {
+public interface Iterator<T> {			// java.util.Iterator
     boolean hasNext();
     T next();
 }
@@ -532,6 +600,13 @@ public class ArraySet<T> implements Iterable<T> {
 }
 ```
 
+> summary:
+>
+> - crate `ArraySetIterator` class to implement the `java.util.Iterator<T>` interface
+> - make `ArraySetIterator` class override the `boolean hasNext()`, `T next()`
+> - let `ArraySet` implement `Iterable<T>` interface
+> - make `ArraySet` override the `Iterator<T> iterator()`
+
 ### toString
 
 If we want to print out the whole class, we have to override `toString` method, or we will only get the name and the address of the object.
@@ -564,7 +639,9 @@ public String toString() {
 ```
 ### equals
 
-In order to check whether a given object is equal to another object, we have to implement the `equals` method, since `==` will only compare the memory address.
+In order to check whether a given object is equal to another object, we have to implement the `equals` method, since `==` ==will only compare the memory address.==
+
+- (default impletemenation of `.equal` uses `==` (probably not what you want))
 
 ```java
 public boolean equals(Object other) {
@@ -589,3 +666,32 @@ public boolean equals(Object other) {
     return true;
 }
 ```
+
+### Bonus
+
+- `.toString()`
+
+    ```java
+    public String toString() {
+        ArrayList<String> listOfItems = new ArrayList<>();
+        for (T x : this) {
+            listOfItems.add(x.toString());
+        }
+        return "{" + String.join(", ", listOfItems) + "}";
+    }
+    ```
+
+- `of`
+
+    ```java
+    public static <Glerp> ArraySet<Glerp> of(Glerp... stuff) {
+        ArraySet<Glerp> returnSet = new ArraySet<>();
+        for (Glerp x : stuff) {
+            returnSet.add(x);
+        }
+        return returnSet;
+    }
+    ```
+
+
+

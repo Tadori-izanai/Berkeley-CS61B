@@ -345,7 +345,7 @@ public static void main(String[] args) {
 
 Typically, we can't add specific implementation to a interface. However, We could add a `default` key word for a method in a interface to allow subclasses to inhert it. Although `SLList` or `AList` does not implement the `print` method in their classes, it will still work.
 
-```
+```java
 default public void print() {
     for (int i = 0; i < size(); i += 1) {
         System.out.print(get(i) + " ");
@@ -364,6 +364,13 @@ In Java, variables have two phases of types: static type and dynamic type. In th
 List61B<String> lst = new SLList<String>();
 ```
 
+<img src="./Week 03.assets/image-20221207144829901.png" alt="image-20221207144829901" style="zoom: 33%;" />
+
+<img src="./Week 03.assets/image-20221207145735601.png" alt="image-20221207145735601" style="zoom: 25%;" />
+
+- Dynamic method selection only happens for **overridden** methods
+- Dynamic method selection not happen for **overloaded** methods
+
 #### Method Selection Algorithm
 
 Suppose we have a function `foo.bar(x1)`, where `foo` has the static type `TPrime`, and `x1` has the static type `T1`.
@@ -380,3 +387,5 @@ When running the code, if `foo`'s dynamic type **override** the `bar` method in 
 
 * Interface inheritance (what): Simply tells what the subclasses should be able to do.
 * Implementation inheritance (how): Tells the subclasses how they should behave.
+
+<img src="./Week 03.assets/image-20221207160704111.png" alt="image-20221207160704111" style="zoom:33%;" />
