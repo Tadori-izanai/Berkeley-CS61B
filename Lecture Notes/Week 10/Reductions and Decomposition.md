@@ -14,7 +14,7 @@
 
 The total runtime of DFS is `O(V + E)`.
 
-```
+```pseudocode
 topological(DAG):
     initialize marked array
     initialize postOrder list

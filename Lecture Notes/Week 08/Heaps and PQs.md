@@ -19,6 +19,20 @@ public interface MinPQ<Item> {
 }
 ```
 
+## Binary min-heapa
+
+<img src="./Heaps and PQs.assets/image-20230301095414716.png" alt="image-20230301095414716" style="zoom:25%;" />
+
+<img src="./Heaps and PQs.assets/image-20230301095622454.png" alt="image-20230301095622454" style="zoom:25%;" />
+
+<img src="./Heaps and PQs.assets/image-20230301095907769.png" alt="image-20230301095907769" style="zoom:25%;" />
+
+### add and removeLast
+
+<img src="./Heaps and PQs.assets/image-20230301100931629.png" alt="image-20230301100931629" style="zoom:25%;" />
+
+---
+
 ## Tree Representation
 
 There are many approaches to represent trees.
@@ -37,7 +51,9 @@ public class Tree1A<Key> {
 }
 ```
 
-![Tree1A](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%209.54.04%20PM.png "Tree1A")
+<!-- ![Tree1A](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%209.54.04%20PM.png "Tree1A") -->
+
+<img src="./Heaps and PQs.assets/image-20230301101521461.png" alt="image-20230301101521461" style="zoom:25%;" />
 
 ```java
 public class Tree1B<Key> {
@@ -47,7 +63,9 @@ public class Tree1B<Key> {
 }
 ```
 
-![Tree1B](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%2010.03.15%20PM.png "Tree1B")
+<!-- ![Tree1B](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%2010.03.15%20PM.png "Tree1B") -->
+
+<img src="./Heaps and PQs.assets/image-20230301101628683.png" alt="image-20230301101628683" style="zoom:25%;" />
 
 ```java
 public class Tree1C<Key> {
@@ -58,7 +76,9 @@ public class Tree1C<Key> {
 }
 ```
 
-![Tree1C](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%2010.08.44%20PM.png "Tree1C")
+<!-- ![Tree1C](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%2010.08.44%20PM.png "Tree1C") -->
+
+<img src="./Heaps and PQs.assets/image-20230301101736969.png" alt="image-20230301101736969" style="zoom:25%;" />
 
 ### Approach 2
 
@@ -72,11 +92,13 @@ public class Tree2<Key> {
 }
 ```
 
-![Tree2](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%2010.15.11%20PM.png "Tree2")
+<!-- ![Tree2](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%2010.15.11%20PM.png "Tree2") -->
+
+<img src="./Heaps and PQs.assets/image-20230301102125164.png" alt="image-20230301102125164" style="zoom:25%;" />
 
 ### Approach 3
 
-Assume that our tree is complete.
+Assume that our tree is complete: So the `parents[]` is determinate
 
 ```java
 public class Tree3<Key> {
@@ -85,7 +107,45 @@ public class Tree3<Key> {
 }
 ```
 
-![Tree3](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%2010.26.05%20PM.png "Tree3")
+<!--![Tree3](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-09%20at%2010.26.05%20PM.png "Tree3") -->
+
+<img src="./Heaps and PQs.assets/image-20230301102354563.png" alt="image-20230301102354563" style="zoom:25%;" />
+
+swim to the proper position:
+```java
+public void swim(int k) {
+    if (keys[parent(k)].compareTo(keys[k]) > 0) {
+        swap(k, parent(k));
+        swim(parent(k));
+    }
+}
+
+private int parent(int k) {
+    return (k - 1) / 2;			// -1 / 2 == 0. it's ok.
+}
+
+private void swap(int p, int q) {
+    K tmp = keys[p];
+    keys[p] = keys[q];
+    keys[q] = tmp;
+}
+```
+
+### Approach 3b
+
+Comparing to approach 3, approach 3b offset everything by 1 spot
+
+<img src="./Heaps and PQs.assets/image-20230301110045700.png" alt="image-20230301110045700" style="zoom:25%;" />
+
+### Comparing to alternative implemenations
+
+<img src="./Heaps and PQs.assets/image-20230301110400610.png" alt="image-20230301110400610" style="zoom:25%;" />
+
+- Heap operations are **amortized** analysis, since the array will have to resize (not a big deal)
+- BST's can have constant time `getSmallest` if pointer is stored to smallest element
+- Array-based heaps take around 1/3rd the memory it takes to represent a heap using approach 1A (direct pointers to children)
+
+---
 
 ## Implementation
 
@@ -146,3 +206,16 @@ Heap Structure
 * `add`: ` Θ(log N)`
 * `getSmallest`: ` Θ(1)`
 * `removeSmallest`: ` Θ(log N)`
+
+---
+
+## Data structure summary
+
+<img src="./Heaps and PQs.assets/image-20230301112029938.png" alt="image-20230301112029938" style="zoom:25%;" />
+
+<img src="./Heaps and PQs.assets/image-20230301112110978.png" alt="image-20230301112110978" style="zoom: 25%;" />
+
+<img src="./Heaps and PQs.assets/image-20230301112235206.png" alt="image-20230301112235206" style="zoom:25%;" />
+
+
+

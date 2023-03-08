@@ -13,6 +13,8 @@ This algorithm of exploring a vertex's immediate children before moving on to it
 * * * Set edgeTo[n] = v.
 * * * Set distTo[n] = distTo[v] + 1.
 
+<img src="./Graph Traversals and Implementations.assets/image-20230301193518172.png" alt="image-20230301193518172" style="zoom:25%;" />
+
 ## Graph API
 
 To Implement our graph algorithms like BreadthFirstPaths and DepthFirstPaths:
@@ -63,25 +65,49 @@ public static void print(Graph G) {
 
 The choice of data structure to represent the graph should have implications on both runtime and memory usage.
 
-![Graph Representations](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-27%20at%202.03.44%20AM.png)
+<!-- ![Graph Representations](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-27%20at%202.03.44%20AM.png) -->
 
 ### Adjacency Matrix
 
 Use a 2D array. There is an edge connecting vertex `s` to `t` if that corresponding cell is 1, which represents `true`.
 
-![Adjacency Matrix](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-27%20at%201.58.11%20AM.png)
+- directed graph
+
+    <img src="./Graph Traversals and Implementations.assets/image-20230301195646070.png" alt="image-20230301195646070" style="zoom:25%;" />
+
+- undirected graph
+
+    <img src="./Graph Traversals and Implementations.assets/image-20230301195715428.png" alt="image-20230301195715428" style="zoom:25%;" />
+
+<!-- ![Adjacency Matrix](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-27%20at%201.58.11%20AM.png) -->
+
+- The total runtime to iterate over all neighbors of `v` is $\Theta(V)$
+- the `print` takes $\Theta(V^2)$
 
 ### Edge Sets
 
 Use a single set to create a collection of all edges.
 
-![Edge Sets](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-27%20at%202.03.36%20AM.png)
+<img src="./Graph Traversals and Implementations.assets/image-20230301200258453.png" alt="image-20230301200258453" style="zoom:25%;" />
+
+<!-- ![Edge Sets](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-27%20at%202.03.36%20AM.png) -->
 
 ### Adjacency Lists
 
 Use an array of lists, indexed by vertex number. Each index contains the index of its adjancent vertices.
 
-![Adjacency Lists](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-27%20at%202.05.55%20AM.png)
+<!-- ![Adjacency Lists](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-27%20at%202.05.55%20AM.png) -->
+
+<img src="./Graph Traversals and Implementations.assets/image-20230301200414388.png" alt="image-20230301200414388" style="zoom:25%;" />
+
+- it is the most popular apporach for representing graphs
+
+- the print method takes $\Theta(V+E)$ (E is the total edges in the graph)
+
+    - the best case is $\Theta(V)$
+    - the worst case is $\Theta(V^2)$
+
+    <img src="./Graph Traversals and Implementations.assets/image-20230301201205512.png" alt="image-20230301201205512" style="zoom:25%;" />
 
 #### Implementation
 
@@ -117,6 +143,10 @@ public class Graph {
 | Edge Sets | `Θ(1)` | `Θ(E)` | `Θ(E)` | `Θ(E)` | `Θ(E)` |
 | Adjacency Lists | `Θ(1)` | `Θ(1) to Θ(V)` | `Θ(V+E)` | `Θ(degree(v))` | `Θ(V+E)` |
 
+---
+
+
+
 ## Implementation
 
 Create a Paths API, which takes a Graph object and query the graph-processing for information.
@@ -129,12 +159,14 @@ public class Paths {
 }
 ```
 
+<img src="./Graph Traversals and Implementations.assets/image-20230301201957704.png" alt="image-20230301201957704" style="zoom:25%;" />
+
 ### Depth First Search
 
 ```java
 public class DepthFirstPaths {
-    private boolean[] marked;
-    private int[] edgeTo;
+    private boolean[] marked;			// marked[v] is true iff v connected to s
+    private int[] edgeTo;				// edgeTo[v] is previous vertex on the path from s to v
     private int s;
 
     public DepthFirstPaths(Graph G, int s) {
@@ -152,9 +184,9 @@ public class DepthFirstPaths {
         }
     }
 
-    public Iterable < Integer > pathTo(int v) {
+    public Iterable<Integer> pathTo(int v) {
         if (!hasPathTo(v)) return null;
-        List <Integer> path = new ArrayList < > ();
+        List <Integer> path = new ArrayList<>();
         for (int x = v; x != s; x = edgeTo[x]) {
             path.add(x);
         }
@@ -172,8 +204,9 @@ public class DepthFirstPaths {
 #### Runtime
 
 * The DepthFirstPaths constructor: `O(V+E)`.
-* * Each vertex is visited at most once (`O(V)`).
-* * Each edge is considered at most twice (`O(E)`).
+	* Each vertex is visited at most once (`O(V)`).
+	* Each edge is considered at most twice (`O(E)`).
+	* cannot say just $O(E)$: because the constructor has to create an all false `marked` array -> takes $\Theta(V)$
 
 ### Breadth First Search
 
@@ -201,18 +234,23 @@ public class BreadthFirstPaths {
 }
 ```
 
+---
+
 ## Graph Problems
 
 ### Adjacency List Based Graphs
 
-Problem|Description|Solution|Efficiency (adj. list)
+|Problem|Description|Solution|Efficiency (adj. list)|
 |---|---|---|---|
-s-t paths|Find a path from s to every reachable vertex.|DepthFirstPaths|`O(V+E)` time, `Θ(V)` space.
-s-t shortest paths|Find a shortest path from s to every reachable vertex.|BreadthFirstPaths|`O(V+E)` time, `Θ(V)` space.
+|s-t paths|Find a path from s to every reachable vertex.|DepthFirstPaths|`O(V+E)` time, `Θ(V)` space.
+|s-t shortest paths|Find a shortest path from s to every reachable vertex.|BreadthFirstPaths|`O(V+E)` time, `Θ(V)` space.|
 
 ### Adjacency Matrix Based Graphs
 
-Problem|Description|Solution|Efficiency (adj. list)
+|Problem|Description|Solution|Efficiency (adj. list)|
 |---|---|---|---|
-s-t paths|Find a path from s to every reachable vertex.|DepthFirstPaths|`O(V^2)` time, `Θ(V)` space.
-s-t shortest paths|Find a shortest path from s to every reachable vertex.|BreadthFirstPaths|`O(V^2)` time, `Θ(V)` space.
+|s-t paths|Find a path from s to every reachable vertex.|DepthFirstPaths|`O(V^2)` time, `Θ(V)` space.|
+|s-t shortest paths|Find a shortest path from s to every reachable vertex.|BreadthFirstPaths|`O(V^2)` time, `Θ(V)` space.|
+
+
+
