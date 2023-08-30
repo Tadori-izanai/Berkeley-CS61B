@@ -19,6 +19,8 @@ General idea:
 *   Copy item with key i into ith entry of new array.
 The algorithm could sort N items in `Θ(N)` worst case time.
 
+<img src="./Radix Sorts.assets/image-20230314210517092.png" alt="image-20230314210517092" style="zoom:25%;" />
+
 #### Complex Cases
 
 Alphabet case: Keys belong to a finite ordered alphabet.
@@ -43,7 +45,11 @@ Runtime for counting sort on N keys with alphabet of size R: `Θ(N + R)`.
 Memory usage: `Θ(N + R)`. (N for ordered array, while R for counts and starting points.)
 If `N ≥ R`, then the algorithm will have a reasonable performance.
 
-## LSD Radix Sort
+---
+
+## LSD (Least Signficant Digit) Radix Sort
+
+<img src="./Radix Sorts.assets/image-20230314213401195.png" alt="image-20230314213401195" style="zoom:25%;" />
 
 Not all keys belong to finite alphabets, such as Strings. However, Strings consist of characters from a finite alphabet.
 
@@ -57,9 +63,12 @@ General idea of LSD Radix Sort:
 
 Runtime of LSD Radix Sort: `Θ(WN + WR)`.
 Runtime depends on length of longest key.
+
 * N: Number of items.
 * R: size of alphabet.
 * W: Width of each item in # digits.
+
+---
 
 ## MSD Radix Sort
 
@@ -67,7 +76,14 @@ Just like LSD, but sort from leftmost digit towards the right.
 
 Sort each subproblem separately to avoid conflicts.
 
+<img src="./Radix Sorts.assets/image-20230314214506896.png" alt="image-20230314214506896" style="zoom:25%;" />
+
 ### Performance
 
 * Best Case: Finish in one counting sort pass, looking only at the top digit. `Θ(N + R)`
 * Worst Case: Look at every character, degenerating to LSD sort. `Θ(WN + WR)`
+
+---
+
+<img src="./Radix Sorts.assets/image-20230314214744555.png" alt="image-20230314214744555" style="zoom:25%;" />
+

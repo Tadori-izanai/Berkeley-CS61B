@@ -1,5 +1,8 @@
-
 # Compression
+
+> Compression and decompress demo:
+>
+> <img src="./Compression.assets/image-20230318145026643.png" alt="image-20230318145026643" style="zoom: 33%;" />
 
 Compression Model #1: Algorithms Operating on Bits.
 * Bitstream -> Algorithms Operating on Bits -> Compressed bits C
@@ -11,9 +14,21 @@ A lossless compression algorithm require that no information is lost.
 
 English text is usually represented by sequences of characters, each 8 bits long. Use fewer than 8 bits for each letter: Have to decide which bit sequences should go with which letters.
 
-Morse code creates ambiguity. Avoid ambiguity by making code prefix free. A prefix-free code is one in which no codeword is a prefix of any other. 
+> <img src="./Compression.assets/image-20230318150235618.png" alt="image-20230318150235618" style="zoom:25%;" />
+
+Morse code creates ambiguity. Avoid ambiguity by making code prefix free. ==A prefix-free code is one in which no codeword is a prefix of any other.==
+
+<img src="./Compression.assets/image-20230318150349629.png" alt="image-20230318150349629" style="zoom:25%;" />
+
+<img src="./Compression.assets/image-20230318150412702.png" alt="image-20230318150412702" style="zoom:25%;" />
+
+- characters always leaves
 
 Some prefix-free codes are better for some texts than others. It’d be useful to have a procedure that calculates the optimized code for a given text.
+
+---
+
+> <img src="./Compression.assets/image-20230318150928018.png" alt="image-20230318150928018" style="zoom:25%;" />
 
 ## Huffman Coding
 
@@ -23,6 +38,8 @@ Calculate relative frequencies.
 * Assign each symbol to a node with weight = relative frequency.
 * Take the two smallest nodes and merge them into a super node with weight equal to sum of weights.
 * Repeat until everything is part of a tree.
+
+<img src="./Compression.assets/image-20230318151546720.png" alt="image-20230318151546720" style="zoom:25%;" />
 
 ### Data Structures
 
@@ -35,6 +52,8 @@ Compared to HashMaps, Arrays are faster, but use more memory if some characters 
 For decoding (compressed bitstream back to bitstream):
 * Tries. (Need to look up longest matching prefix.)
 
+<img src="./Compression.assets/image-20230318153739105.png" alt="image-20230318153739105" style="zoom:25%;" />
+
 ### Practice
 
 Two possible philosophies for using Huffman Compression:
@@ -46,7 +65,7 @@ Two possible philosophies for using Huffman Compression:
 
 Given a file X.txt that prepares to compress into X.huf:
 * Consider each b-bit symbol of X.txt, counting occurrences of each of the 2b possibilities, where b is the size of each symbol in bits.
-* Use Huffman code construction algorithm to create a decoding trie and encoding map. Store this trie at the beginning of X.huf.
+* Use Huffman code construction algorithm to create a ==decoding trie== and ==encoding map==. Store this trie at the beginning of X.huf.
 * Use encoding map to write codeword for each symbol of input into X.huf.
 
 To decompress X.huf:
@@ -66,12 +85,27 @@ There's no compression algorithm that can compress any bitstream by 50%.
 * Argument 1: If true, it will be able to compress any bitstream down to a single bit. Interpreter would have to be able to do the following task for any output sequence.
 * Argument 2: There are far fewer short bitstreams than long ones.
 
+    <img src="./Compression.assets/image-20230318162716443.png" alt="image-20230318162716443" style="zoom:25%;" />
+
 ### Compression Model
 
 Universal compression is impossible, but the following example implies that comparing compression algorithms could still be quite difficult. 
 
-Suppose there is a special purpose compression algorithm that simply hardcodes small bit sequences into large ones. Example, represent GameOfThronesSeason6-Razor1911-Rip-Episode1.mp4 as 010. To avoid this sort of trickery, the compression model should include the bits needed to encode the decompression algorithm itself. 
+Suppose there is a special purpose compression algorithm that simply hardcodes small bit sequences into large ones. Example, represent GameOfThronesSeason6-Razor1911-Rip-Episode1.mp4 as 010. To avoid this sort of trickery, ==the compression model should include the bits needed to encode the decompression algorithm itself.==
 
 Compression Model #2: Self-Extracting Bits
 
-As a model for the decompression process, the algorithm and the compressed bitstream could be treated as a single sequence of bits. (Can think of the algorithm and compressed bitstream as an input to an interpreter.)
+As a model for the decompression process, ==the algorithm and the compressed bitstream could be treated as a single sequence of bits.== (Can think of the algorithm and compressed bitstream as an input to an interpreter.)
+
+
+
+
+
+
+
+
+
+
+
+
+

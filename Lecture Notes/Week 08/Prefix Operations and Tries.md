@@ -1,22 +1,30 @@
 # Prefix Operations and Tries
 
+> <img src="./Prefix Operations and Tries.assets/image-20230308195032961.png" alt="image-20230308195032961" style="zoom:33%;" />
+
 ## Introduction
+
+> "Trie" is short for Retrieval Tree
 
 Tries is an ordered tree data structure used to store keys which can be broken into "characters" and share prefixes with other keys.
 
 * Every node stores only one letter.
 * Nodes can be shared by multiple keys.
-* The last character of the key is marked.
+* The last character of the key is marked. (marked as bule in the figure below)
 
 To check if the trie contains a key, walk down the tree from the root along the correct nodes. If the character does not exist or the final node is not marked, the key does not exist.
 
 For example, the following trie contains `["sam", "sad", "sap", "same", "a", "awls"]`.
 
-![Tries](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-14%20at%2012.47.38%20AM.png "Tries")
+<!-- ![Tries](https://joshhug.gitbooks.io/hug61b/content/assets/Screen%20Shot%202019-03-14%20at%2012.47.38%20AM.png "Tries") -->
 
-* `contains("a)`: true, the final node is marked
-* `contains("sa")`: false, the final node is not marked
-* `contains("saq")`: false, fell off tree
+<img src="./Prefix Operations and Tries.assets/image-20230308200613012.png" alt="image-20230308200613012" style="zoom:25%;" />
+
+* `contains("a)`: true (hit), the final node is marked
+* `contains("sa")`: false (miss), the final node is not marked
+* `contains("saq")`: false (miss), fell off tree
+
+<img src="./Prefix Operations and Tries.assets/image-20230308201002056.png" alt="image-20230308201002056" style="zoom:25%;" />
 
 ## Implementation
 
@@ -41,6 +49,8 @@ public class DataIndexedCharMap<V> {
 
 When building a trie, the `DataIndexedCharMap` class provides a map to all of a nodes' children. However, the `DataIndexedCharMap` object of a node with relatively few children will have mostly null links, which is wasting excess memories.
 
+<img src="./Prefix Operations and Tries.assets/image-20230308201826006.png" alt="image-20230308201826006" style="zoom:25%;" />
+
 Since each link corresponds to a character if and only if that character exists, the character variable of each node can be removed. The value of the character is its position in the parent.
 
 ```java
@@ -49,7 +59,7 @@ public class TrieSet {
    private Node root;
 
    private static class Node {
-      // private char ch;
+      // private char ch;								// it is redundant
       private boolean isKey;
       private DataIndexedCharMap next;
 
@@ -78,20 +88,32 @@ BST
 * Space: C links per node
 * Runtime: `O(log R)`
 
+<img src="./Prefix Operations and Tries.assets/image-20230308204744957.png" alt="image-20230308204744957" style="zoom:25%;" />
+
 Hash Table
 * Space: C links per node
 * Runtime: `O(R)`
 
+<img src="./Prefix Operations and Tries.assets/image-20230308204645440.png" alt="image-20230308204645440" style="zoom:25%;" />
+
 (C is the number of children. R is the size of the alphabet.)
+
+---
 
 ## Performance
 
 If a Trie has N keys, the runtime for our Map/Set operations are as follows:
 
 * add: `Θ(1)`
+
+    > Actually, it is $\Theta(L)$, $L$ is the length of the key
 * contains: `Θ(1)`
 
+    > Actually, it is $O(L)$
+
 The runtime is independent from the number of the keys, since the operations only traverse the length of one key in the worst case.
+
+---
 
 ## Trie String Operations
 
@@ -101,7 +123,8 @@ Tries could efficiently support specific string operations like prefix matching.
 
 The following pseudocode of `collect` operation could return all keys in a trie.
 
-```
+```pseudocode
+/** returns all keys in a trie */
 collect():
     Create an empty list of results x
     For character c in root.next.keys():
@@ -117,7 +140,8 @@ colHelp(String s, List<String> x, Node n):
 
 The following pseudocode of `keyWithPrefix` operation could return all keys with specific prefix. (The `collect` operation begins from the node at the end of the prefix.)
 
-```
+```pseudocode
+/** returns all keys with specific prefix */
 keysWithPrefix(String s):
     Find the end of the prefix, alpha
     Create an empty list x

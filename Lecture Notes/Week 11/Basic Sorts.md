@@ -21,11 +21,17 @@ public class LengthComparator implements Comparator<String> {
 }
 ```
 
+<img src="./Basic Sorts.assets/image-20230309205636520.png" alt="image-20230309205636520" style="zoom:25%;" />
+
+---
+
 ## Performance of Algorithms
 
 The **Time Complexity** of an algorithm is the characterization of its runtime efficiency. Dijkstra’s has time complexity `O(E log V)`.
 
 The **Space Complexity** of an algorithm is the characterization of its **extra** memory usage. Dijkstra’s has space complexity `Θ(V)`.
+
+---
 
 ## Selection Sort
 
@@ -36,6 +42,8 @@ The **Space Complexity** of an algorithm is the characterization of its **extra*
 
 ### Runtime
 `Θ(N^2)` time if an array is used to store the items.
+
+---
 
 ## Heap Sort
 
@@ -52,15 +60,34 @@ Maintain a max-oriented heap to get the maximum item fast.
 *  Selecting largest item: `Θ(1)` time.
 *  Removing largest item: `O(log N)` for each removal.
 The overall runtime is `O(N log N)`.
+*  BTW, the memory usage is $\Theta(N)$
 
 ### In-Place
 
 Rather than inserting into a new array of length N + 1, use a process known as “bottom-up heapification” to convert the array into a heap. This approach could avoid the need for extra copy of all data.
 
+1. Bottom-up heapification:
+
+    - Sink nodes in reverse level order: sink(k) (K = N-1,N-2,...,0)
+    - after sinking, guaranteed that tree rooted at position k is a heap
+2. repeat N times:
+    - delete largest item from the max heap, swapping root with last item in the heap (and then sink the top item in the heap)
+
+<img src="./Basic Sorts.assets/image-20230309213151934.png" alt="image-20230309213151934" style="zoom:25%;" />
+
 #### Runtime
 
 - The Time Complexity of In-Place Heap Sort is the same as the Naive Heap Sort.
-- The Space Complexity of In-Place Heap Sort is `Θ(1)`.
+
+    - Bottom-up heapification: $O(N\log N)$
+    - Selection largest item: $\Theta(1)$
+    - Removing largest item: $O(\log N)$
+
+    <img src="./Basic Sorts.assets/image-20230309213802274.png" alt="image-20230309213802274" style="zoom: 25%;" />
+- The Space Complexity of In-Place Heap Sort is `Θ(1)`. 
+    (assumes implemented iteratively, not recursively)
+
+---
 
 ## Merge Sort
 
@@ -72,6 +99,8 @@ Rather than inserting into a new array of length N + 1, use a process known as �
 
 - The Time Complexity of Merge Sort is `Θ(N log N)`.
 - The Space Complexity of Merge Sort is `Θ(N)`.
+
+---
 
 ## Insertion Sort
 
@@ -96,3 +125,40 @@ For small arrays (N < 15 or so), insertion sort is fastest.
 
 - The best case for insertion sort is `Θ(N)`.
 - The worst case of insertion sort is `Θ(N ^ 2)`.
+
+### In-place version
+
+<img src="./Basic Sorts.assets/image-20230309215921348.png" alt="image-20230309215921348" style="zoom:25%;" />
+
+The runtime:
+
+<img src="./Basic Sorts.assets/image-20230312101012998.png" alt="image-20230312101012998" style="zoom:25%;" />
+
+- best case: Theta(N)
+
+- worst case: Theta(N^2)
+
+- insertion sort on almost sorted arrays does little work
+
+    <img src="./Basic Sorts.assets/image-20230312101525648.png" alt="image-20230312101525648" style="zoom:25%;" />
+
+- other spots
+  
+    <img src="./Basic Sorts.assets/image-20230312102341293.png" alt="image-20230312102341293" style="zoom:25%;" />
+
+---
+
+Sorts so far:
+
+<img src="./Basic Sorts.assets/image-20230312102523982.png" alt="image-20230312102523982" style="zoom:25%;" />
+
+
+
+
+
+
+
+
+
+
+

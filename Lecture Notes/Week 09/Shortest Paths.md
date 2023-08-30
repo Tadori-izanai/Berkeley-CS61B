@@ -52,7 +52,7 @@ def dijkstras(source):
         relax(all edges from p)
 
 def relax(edge p -> q with weight w):
-   if q is visited:			/* i.e. q is not in PQ*/
+   if q is visited:		/* i.e. q is not in PQ */
        return
    if distTo[p] + weight(edge) < distTo[q]:
        distTo[q] = distTo[p] + w

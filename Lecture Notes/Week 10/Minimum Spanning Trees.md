@@ -84,7 +84,7 @@ public class PrimMST {
             if (marked[w]) {
                 continue;
             }
-            if (e.weight() < distTo[w]) {
+            if (e.weight() < distTo[w]) {				////
                 distTo[w] = e.weight();
                 edgeTo[w] = e;
                 pq.decreasePriority(w, distTo[w]);

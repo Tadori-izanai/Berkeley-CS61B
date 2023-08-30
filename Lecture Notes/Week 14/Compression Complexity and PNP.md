@@ -16,11 +16,17 @@ Is there an optimal compression takes as input a target bitstream B, and outputs
 
 The Java-Kolmogorov complexity K_J (B) is the length of the shortest Java program (in bytes) that generates B.
 
+<img src="./Compression Complexity and PNP.assets/image-20230318165917155.png" alt="image-20230318165917155" style="zoom:25%;" />
+
 Fact #1: Kolmogorov Complexity is effectively independent of language. For any bit stream, the Java-Kolmogorov Complexity is no more than a constant factor larger than the Python-Kolmogorov Complexity.
 
 Could write a Python interpreter in Java and then runs the Python program.
 
 It means that most bitstreams are fundamentally incompressible no matter what programming language is used for the compression algorithm.
+
+Fact #2 (Uncomputability): it is impossible to write a program that even calculates the Kolmogorov Complexity of any bitstream
+
+---
 
 ## Space/Time Bounded Compression
 
@@ -49,6 +55,8 @@ Runtime: `O(T x 2 ^ S)`.
 
 * Need to make a more precise definition of what we mean by “efficient”.
 * Closely related to an important puzzle in computer science: Does P = NP?
+
+---
 
 ## P = NP?
 

@@ -40,7 +40,7 @@ D B F A C E G
 * Visit all the nodes in the right subtree.
 
 ```java
-public ovid preOrder(BSTNode x) {
+public void preOrder(BSTNode x) {
     if (x == null) return;
     print(x.key)
     preOrder(x.left)
@@ -243,6 +243,10 @@ cheat sheet
             		stack.push(neighbor)	/* in reverse order */
             mark v
     ```
+    
+    
+    
+    
 
 
 
